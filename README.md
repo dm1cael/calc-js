@@ -1,0 +1,2 @@
+# calc-js
+Calculator project
