@@ -3,12 +3,12 @@ const display = document.querySelector('.display');
 
 let displayContent = '';
 
-let firstNumber = 0;
-let secondNumber = 0;
-let operator = '';
+let firstNumber = undefined;
+let secondNumber = undefined;
+let operator = undefined;
 
-function updateDisplay(content) {
-    if(display.textContent === '0') { 
+function updateDisplay(content, isResult = false) {
+    if(display.textContent === '0' || isResult) { 
         display.textContent = content;
     } else {
         display.textContent += content;
@@ -33,17 +33,15 @@ function operate(firstNumber, secondNumber, operator) {
 }
 
 function handleButtonInteractions(button) {
-    if(button.dataset.value === undefined) return;
-    
-    if(button.dataset.value === '+' 
-        || button.dataset.value === '-' 
-        || button.dataset.value === '*' 
-        || button.dataset.value === '/'
-    ) {
-        firstNumber = displayContent;
+    handleOperator(button);
+
+    if(button.dataset.operate === '=') {
+        handleResult();
     }
 
-    updateDisplay(button.dataset.value);
+    if(button.dataset.value !== undefined) {
+        updateDisplay(button.dataset.value);
+    }
 }
 
 buttons.forEach(button => {
@@ -51,6 +49,37 @@ buttons.forEach(button => {
         handleButtonInteractions(button);
     });
 });
+
+function getSecondNumber() {
+    if(operator === undefined) return;
+        
+    const operatorIndex = displayContent.indexOf(operator);
+    const second = displayContent.slice(operatorIndex + 1);
+    
+    return second;
+}
+
+function handleResult() {
+    const localSecondNumber = getSecondNumber();
+
+    if(secondNumber !== '' || secondNumber !== undefined) {
+        firstNumber = Number(firstNumber);
+        secondNumber = Number(localSecondNumber);
+
+        let result = operate(firstNumber, secondNumber, operator);
+        updateDisplay(result, true);
+    }
+}
+
+function handleOperator(button) {
+    if (button.dataset.value === '+'
+        || button.dataset.value === '-'
+        || button.dataset.value === '*'
+        || button.dataset.value === '/') {
+        firstNumber = displayContent;
+        operator = button.dataset.value;
+    }
+}
 
 // Basic functions
 
