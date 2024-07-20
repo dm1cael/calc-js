@@ -1,6 +1,21 @@
+const buttons = document.querySelectorAll('.button');
+const display = document.querySelector('.display');
+
+let displayContent = '';
+
 let firstNumber = 0;
 let secondNumber = 0;
 let operator = '';
+
+function updateDisplay(content) {
+    if(display.textContent === '0') { 
+        display.textContent = content;
+    } else {
+        display.textContent += content;
+    }
+
+    displayContent = display.textContent;
+}
 
 function operate(firstNumber, secondNumber, operator) {
     switch (operator) {
@@ -16,6 +31,26 @@ function operate(firstNumber, secondNumber, operator) {
             return 'Unknown operation';
     }
 }
+
+function handleButtonInteractions(button) {
+    if(button.dataset.value === undefined) return;
+    
+    if(button.dataset.value === '+' 
+        || button.dataset.value === '-' 
+        || button.dataset.value === '*' 
+        || button.dataset.value === '/'
+    ) {
+        firstNumber = displayContent;
+    }
+
+    updateDisplay(button.dataset.value);
+}
+
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        handleButtonInteractions(button);
+    });
+});
 
 // Basic functions
 
