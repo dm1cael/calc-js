@@ -66,6 +66,8 @@ function getSecondNumber(nextOperator) {
     }
 
     const second = displayContent.slice(operatorIndex + 1);
+
+    if(second < 0) return EMPTY_STRING;
     return getDisplayWithNoOperator(second, nextOperator);
 }
 
@@ -80,6 +82,9 @@ function handleResult(nextOperator = EMPTY_STRING) {
         let result = operate(firstNumber, secondNumber, operator);
         updateDisplay(result + nextOperator, true);
 
+        console.log(firstNumber, secondNumber, operator);
+
+        firstNumber = getDisplayWithNoOperator(displayContent, nextOperator);
         secondNumber = undefined;
         operator = undefined;
     }
@@ -96,7 +101,6 @@ function handleOperator(button) {
 
         if(getSecondNumber() !== EMPTY_STRING) {
             handleResult(button.dataset.value);
-            firstNumber = getDisplayWithNoOperator(displayContent, button.dataset.value);
         }
 
         operator = button.dataset.value;
