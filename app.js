@@ -82,8 +82,6 @@ function handleResult(nextOperator = EMPTY_STRING) {
         let result = operate(firstNumber, secondNumber, operator);
         updateDisplay(result + nextOperator, true);
 
-        console.log(firstNumber, secondNumber, operator);
-
         firstNumber = getDisplayWithNoOperator(displayContent, nextOperator);
         secondNumber = undefined;
         operator = undefined;
