@@ -4,20 +4,22 @@ const buttons = document.querySelectorAll('.button');
 const display = document.querySelector('.display');
 
 let displayContent = '';
-let isFirstInteraction = true;
+let shouldClearDisplay = true;
 
 let firstNumber = undefined;
 let secondNumber = undefined;
 let operator = undefined;
 
 function updateDisplay(content, isResult = false) {
-    if(isFirstInteraction || isResult) { 
+    if(displayContent.includes('ERROR')) shouldClearDisplay = true;
+
+    if(shouldClearDisplay || isResult) { 
         display.textContent = content;
     } else {
         display.textContent += content;
     }
 
-    isFirstInteraction = false;
+    shouldClearDisplay = false;
     displayContent = display.textContent;
 }
 
@@ -32,7 +34,7 @@ function operate(firstNumber, secondNumber, operator) {
         case '/':
             return divide(firstNumber, secondNumber);
         default:
-            return 'Unknown operation';
+            return 'ERROR: Unknown operation';
     }
 }
 
@@ -74,8 +76,6 @@ function handleResult(nextOperator = EMPTY_STRING) {
     if(secondNumber !== EMPTY_STRING || secondNumber !== undefined) {
         firstNumber = Number(firstNumber);
         secondNumber = Number(localSecondNumber);
-
-        console.log(firstNumber, secondNumber, operator);
 
         let result = operate(firstNumber, secondNumber, operator);
         updateDisplay(result + nextOperator, true);
@@ -122,6 +122,6 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    if(b === 0) return 'You can\'t divide by zero.';
+    if(b === 0) return 'ERROR: You can\'t divide by zero.';
     return a / b;
 }
