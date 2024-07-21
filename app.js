@@ -3,8 +3,8 @@ const EMPTY_STRING = '';
 const buttons = document.querySelectorAll('.button');
 const display = document.querySelector('.display');
 
-let displayContent = '';
-let shouldClearDisplay = true;
+let displayContent = '0';
+let shouldClearDisplay = false;
 
 let firstNumber = undefined;
 let secondNumber = undefined;
@@ -48,6 +48,11 @@ function handleButtonInteractions(button) {
     if(button.dataset.value === '=') {
         handleResult();
     } else if(button.dataset.value !== undefined) {
+
+        if(displayContent === '0' && button.dataset.value === isNumber(button.dataset.value)) {
+            shouldClearDisplay = true;
+        }
+
         updateDisplay(button.dataset.value);
     }
 
@@ -64,13 +69,17 @@ function handleButtonInteractions(button) {
     handleOperator(button);
 }
 
+function isNumber(value) {
+    return Number(value) != NaN;
+}
+
 function resetCalculator() {
     firstNumber = undefined;
     secondNumber = undefined;
     operator = undefined;
 
     updateDisplay('0', true);
-    shouldClearDisplay = true;
+    shouldClearDisplay = false;
 }
 
 function deleteLastContent() {
@@ -160,6 +169,6 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    if(b === 0) return 'ERROR: You can\'t divide by zero.';
+    if(b === 0) return 0;
     return a / b;
 }
