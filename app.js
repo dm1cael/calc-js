@@ -12,16 +12,15 @@ let operator = undefined;
 
 function updateDisplay(content, isResult = false) {
     if(displayContent.includes('ERROR')) shouldClearDisplay = true;
-    console.log(shouldClearDisplay);
 
     if(shouldClearDisplay || isResult) { 
-        display.textContent = content;
+        displayContent = content;
     } else {
-        display.textContent += content;
+        displayContent += content;
     }
 
     shouldClearDisplay = false;
-    displayContent = display.textContent;
+    display.textContent = displayContent;
 }
 
 function operate(firstNumber, secondNumber, operator) {
@@ -57,10 +56,9 @@ function handleButtonInteractions(button) {
             resetCalculator();
             break;
         case 'clear-last':
-            //deleteLastContent();
+            deleteLastContent();
             break;
-        default:
-            return null;
+        default: break;
     }
 
     handleOperator(button);
@@ -75,7 +73,20 @@ function resetCalculator() {
     shouldClearDisplay = true;
 }
 
+function deleteLastContent() {
+    const displayContentLength = displayContent.length;
+    if(displayContentLength > 1) { 
+        updateDisplay(displayContent.slice(0, -1), true);
+    }
 
+    const firstNumberLength = // +2 because we need to count the operator as well
+        firstNumber !== undefined ? firstNumber.toString().length + 2 : 0;
+
+    if(firstNumber !== undefined && displayContentLength < firstNumberLength) {
+        firstNumber = undefined;
+        secondNumber = undefined;
+    }
+}
 
 function getSecondNumber(nextOperator) {
     if(operator === undefined) return;
@@ -95,6 +106,8 @@ function getSecondNumber(nextOperator) {
 }
 
 function handleResult(nextOperator = EMPTY_STRING) {
+    console.log(firstNumber);
+
     if(firstNumber === undefined || operator === undefined) return;
     const localSecondNumber = getSecondNumber(nextOperator);
 
