@@ -32,23 +32,21 @@ function operate(firstNumber, secondNumber, operator) {
     }
 }
 
-function handleButtonInteractions(button) {
-    handleOperator(button);
-
-    if(button.dataset.operate === '=') {
-        handleResult();
-    }
-
-    if(button.dataset.value !== undefined) {
-        updateDisplay(button.dataset.value);
-    }
-}
-
 buttons.forEach(button => {
     button.addEventListener('click', () => {
         handleButtonInteractions(button);
     });
 });
+
+function handleButtonInteractions(button) {
+    handleOperator(button);
+
+    if(button.dataset.value === '=') {
+        handleResult();
+    } else if(button.dataset.value !== undefined) {
+        updateDisplay(button.dataset.value);
+    }
+}
 
 function getSecondNumber() {
     if(operator === undefined) return;
@@ -60,6 +58,7 @@ function getSecondNumber() {
 }
 
 function handleResult() {
+    if(firstNumber === undefined || operator === undefined) return;
     const localSecondNumber = getSecondNumber();
 
     if(secondNumber !== '' || secondNumber !== undefined) {
