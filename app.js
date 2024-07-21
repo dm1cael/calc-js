@@ -52,10 +52,16 @@ function handleButtonInteractions(button) {
 
 function getSecondNumber(nextOperator) {
     if(operator === undefined) return;
-        
-    const operatorIndex = displayContent.indexOf(operator);
+    let operatorIndex = EMPTY_STRING;
+
+    if(firstNumber > 0) {
+        operatorIndex = displayContent.indexOf(operator);
+    } else {
+        const firstNumberIndex = displayContent.indexOf(firstNumber);
+        operatorIndex = displayContent.indexOf(operator, firstNumberIndex + 1);
+    }
+
     const second = displayContent.slice(operatorIndex + 1);
-    
     return getDisplayWithNoOperator(second, nextOperator);
 }
 
