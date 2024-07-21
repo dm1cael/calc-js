@@ -57,7 +57,8 @@ function handleButtonInteractions(button) {
     if(button.dataset.value === '=') {
         handleResult();
     } else if(button.dataset.value !== undefined) {
-        if(displayContent === '0' && button.dataset.value === isNumber(button.dataset.value)) {
+        console.log(isNumber(button.dataset.value));
+        if(displayContent === '0' && isNumber(button.dataset.value)) {
             shouldClearDisplay = true;
         }
 
@@ -81,7 +82,7 @@ function handleActions(button) {
 }
 
 function isNumber(value) {
-    return Number(value) != NaN;
+    return value >= 0 && value <= 9;
 }
 
 function resetCalculator() {
