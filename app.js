@@ -12,6 +12,7 @@ let operator = undefined;
 
 function updateDisplay(content, isResult = false) {
     if(displayContent.includes('ERROR')) shouldClearDisplay = true;
+    console.log(shouldClearDisplay);
 
     if(shouldClearDisplay || isResult) { 
         display.textContent = content;
@@ -51,8 +52,30 @@ function handleButtonInteractions(button) {
         updateDisplay(button.dataset.value);
     }
 
+    switch(button.dataset.action) {
+        case 'clear':
+            resetCalculator();
+            break;
+        case 'clear-last':
+            //deleteLastContent();
+            break;
+        default:
+            return null;
+    }
+
     handleOperator(button);
 }
+
+function resetCalculator() {
+    firstNumber = undefined;
+    secondNumber = undefined;
+    operator = undefined;
+
+    updateDisplay('0', true);
+    shouldClearDisplay = true;
+}
+
+
 
 function getSecondNumber(nextOperator) {
     if(operator === undefined) return;
