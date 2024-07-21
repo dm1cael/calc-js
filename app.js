@@ -45,10 +45,18 @@ buttons.forEach(button => {
 });
 
 function handleButtonInteractions(button) {
+    if(button.dataset.value === '.') {
+        if(displayContent.includes('.') && firstNumber === undefined) return;
+    
+        const dotsOnDisplay = displayContent.split('.').length;
+        console.log(dotsOnDisplay);
+        console.log(displayContent);
+        if(dotsOnDisplay > 2) return;
+    }
+
     if(button.dataset.value === '=') {
         handleResult();
     } else if(button.dataset.value !== undefined) {
-
         if(displayContent === '0' && button.dataset.value === isNumber(button.dataset.value)) {
             shouldClearDisplay = true;
         }
@@ -56,7 +64,12 @@ function handleButtonInteractions(button) {
         updateDisplay(button.dataset.value);
     }
 
-    switch(button.dataset.action) {
+    handleActions(button);
+    handleOperator(button);
+}
+
+function handleActions(button) {
+    switch (button.dataset.action) {
         case 'clear':
             resetCalculator();
             break;
@@ -65,8 +78,6 @@ function handleButtonInteractions(button) {
             break;
         default: break;
     }
-
-    handleOperator(button);
 }
 
 function isNumber(value) {
@@ -115,8 +126,6 @@ function getSecondNumber(nextOperator) {
 }
 
 function handleResult(nextOperator = EMPTY_STRING) {
-    console.log(firstNumber);
-
     if(firstNumber === undefined || operator === undefined) return;
     const localSecondNumber = getSecondNumber(nextOperator);
 
@@ -126,7 +135,7 @@ function handleResult(nextOperator = EMPTY_STRING) {
 
         let result = operate(firstNumber, secondNumber, operator);
         updateDisplay(result + nextOperator, true);
-
+        
         firstNumber = getDisplayWithNoOperator(displayContent, nextOperator);
         secondNumber = undefined;
         operator = undefined;
