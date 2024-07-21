@@ -67,6 +67,9 @@ function handleResult() {
 
         let result = operate(firstNumber, secondNumber, operator);
         updateDisplay(result, true);
+
+        secondNumber = undefined;
+        operator = '';
     }
 }
 
