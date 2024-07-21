@@ -1,3 +1,5 @@
+const EMPTY_STRING = '';
+
 const buttons = document.querySelectorAll('.button');
 const display = document.querySelector('.display');
 
@@ -39,37 +41,40 @@ buttons.forEach(button => {
 });
 
 function handleButtonInteractions(button) {
-    handleOperator(button);
-
     if(button.dataset.value === '=') {
         handleResult();
     } else if(button.dataset.value !== undefined) {
         updateDisplay(button.dataset.value);
     }
+
+    handleOperator(button);
 }
 
-function getSecondNumber() {
+function getSecondNumber(nextOperator) {
     if(operator === undefined) return;
         
     const operatorIndex = displayContent.indexOf(operator);
     const second = displayContent.slice(operatorIndex + 1);
     
-    return second;
+    return getDisplayWithNoOperator(second, nextOperator);
 }
 
-function handleResult() {
+function handleResult(nextOperator = EMPTY_STRING) {
     if(firstNumber === undefined || operator === undefined) return;
-    const localSecondNumber = getSecondNumber();
+    const localSecondNumber = getSecondNumber(nextOperator);
 
-    if(secondNumber !== '' || secondNumber !== undefined) {
+    if(secondNumber !== EMPTY_STRING || secondNumber !== undefined) {
         firstNumber = Number(firstNumber);
         secondNumber = Number(localSecondNumber);
 
-        let result = operate(firstNumber, secondNumber, operator);
-        updateDisplay(result, true);
+        console.log(firstNumber, secondNumber, operator);
 
+        let result = operate(firstNumber, secondNumber, operator);
+        updateDisplay(result + nextOperator, true);
+
+        firstNumber = getDisplayWithNoOperator(displayContent, nextOperator);
         secondNumber = undefined;
-        operator = '';
+        operator = undefined;
     }
 }
 
@@ -78,9 +83,20 @@ function handleOperator(button) {
         || button.dataset.value === '-'
         || button.dataset.value === '*'
         || button.dataset.value === '/') {
-        firstNumber = displayContent;
+        if(firstNumber === undefined) {
+            firstNumber = getDisplayWithNoOperator(displayContent, button.dataset.value);
+        }
+
+        if(getSecondNumber() !== '') {
+            handleResult(button.dataset.value);
+        }
+
         operator = button.dataset.value;
     }
+}
+
+function getDisplayWithNoOperator(raw, operator) {
+    return raw.replace(operator, '');
 }
 
 // Basic functions
