@@ -80,7 +80,6 @@ function handleResult(nextOperator = EMPTY_STRING) {
         let result = operate(firstNumber, secondNumber, operator);
         updateDisplay(result + nextOperator, true);
 
-        firstNumber = getDisplayWithNoOperator(displayContent, nextOperator);
         secondNumber = undefined;
         operator = undefined;
     }
@@ -97,6 +96,7 @@ function handleOperator(button) {
 
         if(getSecondNumber() !== EMPTY_STRING) {
             handleResult(button.dataset.value);
+            firstNumber = getDisplayWithNoOperator(displayContent, button.dataset.value);
         }
 
         operator = button.dataset.value;
