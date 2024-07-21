@@ -4,18 +4,20 @@ const buttons = document.querySelectorAll('.button');
 const display = document.querySelector('.display');
 
 let displayContent = '';
+let isFirstInteraction = true;
 
 let firstNumber = undefined;
 let secondNumber = undefined;
 let operator = undefined;
 
 function updateDisplay(content, isResult = false) {
-    if(display.textContent === '0' || isResult) { 
+    if(isFirstInteraction || isResult) { 
         display.textContent = content;
     } else {
         display.textContent += content;
     }
 
+    isFirstInteraction = false;
     displayContent = display.textContent;
 }
 
@@ -93,7 +95,7 @@ function handleOperator(button) {
             firstNumber = getDisplayWithNoOperator(displayContent, button.dataset.value);
         }
 
-        if(getSecondNumber() !== '') {
+        if(getSecondNumber() !== EMPTY_STRING) {
             handleResult(button.dataset.value);
         }
 
@@ -102,7 +104,7 @@ function handleOperator(button) {
 }
 
 function getDisplayWithNoOperator(raw, operator) {
-    return raw.replace(operator, '');
+    return raw.replace(operator, EMPTY_STRING);
 }
 
 // Basic functions
