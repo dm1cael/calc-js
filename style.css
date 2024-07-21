@@ -20,3 +20,69 @@ main {
 
     height: 100vh;
 }
+
+.calc-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    
+    background-color: #d2c6ff;
+    border-radius: 0.5em;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+    padding: 1em;
+}
+
+.display {
+    background-color: #C2E4FF;
+    border-radius: 0.5em;
+
+    padding: 2em;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 1em;
+}
+
+.left-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.right-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.numbers {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.button {
+    padding: 2em;
+    border-radius: 0.5em;
+
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.undo-btn {
+    background-color: #FFC7D5;
+}
+
+.number-btn {
+    background-color: #B7F5A9;
+}
+
+.operation-btn {
+    background-color: #FFDB99;
+}
