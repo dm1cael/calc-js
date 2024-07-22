@@ -47,12 +47,12 @@ buttons.forEach(button => {
 });
 
 function handleCalculatorInteractions(button = undefined, key = undefined) {
-    console.log(key)
-
     if(button !== undefined) {
         if(button.dataset.value === '.') {
             if(isDecimalInvalid()) return;
-        } else if(button.dataset.value === '=') {
+        }
+
+        if(button.dataset.value === '=') {
             handleResult();
         } else if(button.dataset.value !== undefined) {
             updateDisplay(button.dataset.value);
@@ -60,7 +60,9 @@ function handleCalculatorInteractions(button = undefined, key = undefined) {
     } else {
         if(key === '.') {
             if(isDecimalInvalid()) return;
-        } else if(key === '=') {
+        }
+
+        if(key === '=') {
             handleResult();
         } else if(isNumber(key) || isKeyValid(key)) {
             updateDisplay(key);
@@ -100,10 +102,11 @@ function isNumber(value) {
 }
 
 function isDecimalInvalid() {
-    if(displayContent.includes('.') && firstNumber === undefined) return true;
-    
     const dotsOnDisplay = displayContent.split('.').length;
-    if(dotsOnDisplay > 2) return true;
+
+    if(displayContent.includes('.') && firstNumber === undefined || dotsOnDisplay > 2) {
+        return true;
+    }
 }
 
 function resetCalculator() {
