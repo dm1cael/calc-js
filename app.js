@@ -103,7 +103,6 @@ function isNumber(value) {
 
 function isDecimalInvalid() {
     const dotsOnDisplay = displayContent.split('.').length;
-
     if(displayContent.includes('.') && firstNumber === undefined || dotsOnDisplay > 2) {
         return true;
     }
