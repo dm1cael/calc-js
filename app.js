@@ -42,34 +42,56 @@ function operate(firstNumber, secondNumber, operator) {
 
 buttons.forEach(button => {
     button.addEventListener('click', () => {
-        handleButtonInteractions(button);
+        handleCalculatorInteractions(button);
     });
 });
 
-function handleButtonInteractions(button) {
-    if(button.dataset.value === '.') {
-        if(isDecimalInvalid()) return;
+function handleCalculatorInteractions(button = undefined, key = undefined) {
+    console.log(key)
+
+    if(button !== undefined) {
+        if(button.dataset.value === '.') {
+            if(isDecimalInvalid()) return;
+        } else if(button.dataset.value === '=') {
+            handleResult();
+        } else if(button.dataset.value !== undefined) {
+            updateDisplay(button.dataset.value);
+        }
+    } else {
+        if(key === '.') {
+            if(isDecimalInvalid()) return;
+        } else if(key === '=') {
+            handleResult();
+        } else if(isNumber(key) || isKeyValid(key)) {
+            updateDisplay(key);
+        }
     }
 
-    if(button.dataset.value === '=') {
-        handleResult();
-    } else if(button.dataset.value !== undefined) {
-        updateDisplay(button.dataset.value);
-    }
-
-    handleActions(button);
-    handleOperator(button);
+    handleActions(button, key);
+    //handleOperator(toHandle);
 }
 
-function handleActions(button) {
-    switch (button.dataset.action) {
-        case 'clear':
-            resetCalculator();
-            break;
-        case 'clear-last':
-            deleteLastContent();
-            break;
-        default: break;
+function handleActions(button = undefined, key = undefined) {
+    if(button !== undefined) {
+        switch (button.dataset.action) {
+            case 'clear':
+                resetCalculator();
+                break;
+            case 'clear-last':
+                deleteLastContent();
+                break;
+            default: break;
+        }
+    } else {
+        switch(key) {
+            case 'Delete':
+                resetCalculator();
+                break;
+            case 'Backspace':
+                deleteLastContent();
+                break;
+            default: break;
+        }
     }
 }
 
@@ -180,4 +202,15 @@ function multiply(a, b) {
 function divide(a, b) {
     if(b === 0) return 0;
     return a / b;
+}
+
+// Keyboard support
+
+window.addEventListener('keydown', event => {
+    handleCalculatorInteractions(undefined, key = event.key);
+});
+
+function isKeyValid(key) {
+    if(key === '+' || key === '-' || key === '*' 
+        || key === '/' || key === '.' || key === '=') return true;
 }
