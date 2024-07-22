@@ -11,7 +11,9 @@ let secondNumber = undefined;
 let operator = undefined;
 
 function updateDisplay(content, isResult = false) {
-    if(displayContent.includes('ERROR')) shouldClearDisplay = true;
+    if(displayContent === '0' && isNumber(content) || displayContent.includes('ERROR')) {
+        shouldClearDisplay = true;
+    }
 
     if(shouldClearDisplay || isResult) { 
         displayContent = content;
@@ -52,10 +54,6 @@ function handleButtonInteractions(button) {
     if(button.dataset.value === '=') {
         handleResult();
     } else if(button.dataset.value !== undefined) {
-        if(displayContent === '0' && isNumber(button.dataset.value)) {
-            shouldClearDisplay = true;
-        }
-
         updateDisplay(button.dataset.value);
     }
 
