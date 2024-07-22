@@ -11,7 +11,9 @@ let secondNumber = undefined;
 let operator = undefined;
 
 function updateDisplay(content, isResult = false) {
-    if(displayContent.includes('ERROR')) shouldClearDisplay = true;
+    if(displayContent === '0' && isNumber(content) || displayContent.includes('ERROR')) {
+        shouldClearDisplay = true;
+    }
 
     if(shouldClearDisplay || isResult) { 
         displayContent = content;
@@ -40,46 +42,71 @@ function operate(firstNumber, secondNumber, operator) {
 
 buttons.forEach(button => {
     button.addEventListener('click', () => {
-        handleButtonInteractions(button);
+        handleCalculatorInteractions(button);
     });
 });
 
-function handleButtonInteractions(button) {
-    if(button.dataset.value === '.') {
-        if(displayContent.includes('.') && firstNumber === undefined) return;
-    
-        const dotsOnDisplay = displayContent.split('.').length;
-        if(dotsOnDisplay > 2) return;
-    }
-
-    if(button.dataset.value === '=') {
-        handleResult();
-    } else if(button.dataset.value !== undefined) {
-        if(displayContent === '0' && isNumber(button.dataset.value)) {
-            shouldClearDisplay = true;
+function handleCalculatorInteractions(button = undefined, key = undefined) {
+    if(button !== undefined) {
+        if(button.dataset.value === '.') {
+            if(isDecimalInvalid()) return;
         }
 
-        updateDisplay(button.dataset.value);
+        if(button.dataset.value === '=') {
+            handleResult();
+        } else if(button.dataset.value !== undefined) {
+            updateDisplay(button.dataset.value);
+        }
+    } else {
+        if(key === '.') {
+            if(isDecimalInvalid()) return;
+        }
+
+        if(key === '=') {
+            handleResult();
+        } else if(isNumber(key) || isKeyValid(key)) {
+            updateDisplay(key);
+        }
     }
 
-    handleActions(button);
-    handleOperator(button);
+    handleActions(button, key);
+    handleOperator(button, key);
 }
 
-function handleActions(button) {
-    switch (button.dataset.action) {
-        case 'clear':
-            resetCalculator();
-            break;
-        case 'clear-last':
-            deleteLastContent();
-            break;
-        default: break;
+function handleActions(button = undefined, key = undefined) {
+    if(button !== undefined) {
+        switch (button.dataset.action) {
+            case 'clear':
+                resetCalculator();
+                break;
+            case 'clear-last':
+                deleteLastContent();
+                break;
+            default: break;
+        }
+    } else {
+        switch(key) {
+            case 'Delete':
+                resetCalculator();
+                break;
+            case 'Backspace':
+                deleteLastContent();
+                break;
+            default: break;
+        }
     }
 }
 
 function isNumber(value) {
     return value >= 0 && value <= 9;
+}
+
+function isDecimalInvalid() {
+    const dotsOnDisplay = displayContent.split('.').length;
+
+    if(displayContent.includes('.') && firstNumber === undefined || dotsOnDisplay > 2) {
+        return true;
+    }
 }
 
 function resetCalculator() {
@@ -140,20 +167,23 @@ function handleResult(nextOperator = EMPTY_STRING) {
     }
 }
 
-function handleOperator(button) {
-    if (button.dataset.value === '+'
-        || button.dataset.value === '-'
-        || button.dataset.value === '*'
-        || button.dataset.value === '/') {
+function handleOperator(button = undefined, key = undefined) {
+    const operatorValue = 
+        button !== undefined ? button.dataset.value : key
+
+    if (operatorValue === '+'
+        || operatorValue === '-'
+        || operatorValue === '*'
+        || operatorValue === '/') {
         if(firstNumber === undefined) {
-            firstNumber = getDisplayWithNoOperator(displayContent, button.dataset.value);
+            firstNumber = getDisplayWithNoOperator(displayContent, operatorValue);
         }
 
         if(getSecondNumber() !== EMPTY_STRING) {
-            handleResult(button.dataset.value);
+            handleResult(operatorValue);
         }
 
-        operator = button.dataset.value;
+        operator = operatorValue;
     }
 }
 
@@ -178,4 +208,15 @@ function multiply(a, b) {
 function divide(a, b) {
     if(b === 0) return 0;
     return a / b;
+}
+
+// Keyboard support
+
+window.addEventListener('keydown', event => {
+    handleCalculatorInteractions(undefined, key = event.key);
+});
+
+function isKeyValid(key) {
+    if(key === '+' || key === '-' || key === '*' 
+        || key === '/' || key === '.' || key === '=') return true;
 }
