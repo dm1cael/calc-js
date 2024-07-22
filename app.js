@@ -68,7 +68,7 @@ function handleCalculatorInteractions(button = undefined, key = undefined) {
     }
 
     handleActions(button, key);
-    //handleOperator(toHandle);
+    handleOperator(button, key);
 }
 
 function handleActions(button = undefined, key = undefined) {
@@ -164,20 +164,23 @@ function handleResult(nextOperator = EMPTY_STRING) {
     }
 }
 
-function handleOperator(button) {
-    if (button.dataset.value === '+'
-        || button.dataset.value === '-'
-        || button.dataset.value === '*'
-        || button.dataset.value === '/') {
+function handleOperator(button = undefined, key = undefined) {
+    const operatorValue = 
+        button !== undefined ? button.dataset.value : key
+
+    if (operatorValue === '+'
+        || operatorValue === '-'
+        || operatorValue === '*'
+        || operatorValue === '/') {
         if(firstNumber === undefined) {
-            firstNumber = getDisplayWithNoOperator(displayContent, button.dataset.value);
+            firstNumber = getDisplayWithNoOperator(displayContent, operatorValue);
         }
 
         if(getSecondNumber() !== EMPTY_STRING) {
-            handleResult(button.dataset.value);
+            handleResult(operatorValue);
         }
 
-        operator = button.dataset.value;
+        operator = operatorValue;
     }
 }
 
