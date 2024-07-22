@@ -49,15 +49,12 @@ function handleButtonInteractions(button) {
         if(displayContent.includes('.') && firstNumber === undefined) return;
     
         const dotsOnDisplay = displayContent.split('.').length;
-        console.log(dotsOnDisplay);
-        console.log(displayContent);
         if(dotsOnDisplay > 2) return;
     }
 
     if(button.dataset.value === '=') {
         handleResult();
     } else if(button.dataset.value !== undefined) {
-        console.log(isNumber(button.dataset.value));
         if(displayContent === '0' && isNumber(button.dataset.value)) {
             shouldClearDisplay = true;
         }
