@@ -46,10 +46,7 @@ buttons.forEach(button => {
 
 function handleButtonInteractions(button) {
     if(button.dataset.value === '.') {
-        if(displayContent.includes('.') && firstNumber === undefined) return;
-    
-        const dotsOnDisplay = displayContent.split('.').length;
-        if(dotsOnDisplay > 2) return;
+        if(isDecimalInvalid()) return;
     }
 
     if(button.dataset.value === '=') {
@@ -80,6 +77,13 @@ function handleActions(button) {
 
 function isNumber(value) {
     return value >= 0 && value <= 9;
+}
+
+function isDecimalInvalid() {
+    if(displayContent.includes('.') && firstNumber === undefined) return true;
+    
+    const dotsOnDisplay = displayContent.split('.').length;
+    if(dotsOnDisplay > 2) return true;
 }
 
 function resetCalculator() {
